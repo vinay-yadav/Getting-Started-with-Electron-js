@@ -1,8 +1,11 @@
-const { app, BrowserWindow, Menu, globalShortcut } = require('electron');
+const { app, BrowserWindow, Menu, globalShortcut, ipcMain } = require('electron');
+
+const DEVELOPMENT = 'development';
+const PRODUCTION = 'production';
 
 // set ENV
-process.env.NODE_ENV = 'development';
-const isDev = process.env.NODE_ENV !== 'production' ? true : false;
+process.env.NODE_ENV = DEVELOPMENT;
+const isDev = process.env.NODE_ENV !== PRODUCTION ? true : false;
 
 // set Platform
 // console.log(process.platform);
@@ -15,12 +18,21 @@ let aboutWindow;
 const createMainWindow = () => {
     mainWindow = new BrowserWindow({
         title: 'Image Shrink',
-        width: 500,
+        width: isDev ? 800 : 500,
         height: 600,
         icon: './assets/icons/Icon_256x256.png',
         resizable: isDev,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true
+        }
     });
+
+    // auto open dev-tools in development 
+    if (isDev)
+        mainWindow.webContents.openDevTools();
 
     // mainWindow.loadURL(`file://${__dirname}/app/index.html`);
     mainWindow.loadFile('./app/index.html');
@@ -131,3 +143,8 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 });
+
+
+ipcMain.on('image:minimize', (e, data) => {
+    console.log('data', data);
+})
