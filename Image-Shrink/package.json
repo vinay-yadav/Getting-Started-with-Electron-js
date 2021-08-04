@@ -1,0 +1,16 @@
+{
+  "name": "image-shrink",
+  "version": "1.0.0",
+  "description": "Desktop Image Compressor App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon --exec electron ."
+  },
+  "author": "Vinay",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^13.1.7",
+    "nodemon": "^2.0.12"
+  }
+}
